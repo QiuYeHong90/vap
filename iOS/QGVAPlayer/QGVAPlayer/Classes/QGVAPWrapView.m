@@ -135,7 +135,7 @@
     
     switch (self.contentMode) {
         case QGVAPWrapViewContentModeScaleToFill: {
-
+            self.vapView.frame = self.bounds;
         }
             break;
         case QGVAPWrapViewContentModeAspectFit: {
@@ -148,7 +148,7 @@
             }
             
             self.vapView.frame = CGRectMake(0, 0, realWidth, realHeight);
-            self.vapView.center = self.center;
+            self.vapView.center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
         }
             break;;
         case QGVAPWrapViewContentModeAspectFill: {
@@ -161,7 +161,7 @@
             }
             
             self.vapView.frame = CGRectMake(0, 0, realWidth, realHeight);
-            self.vapView.center = self.center;
+            self.vapView.center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
         }
             break;;
         default:

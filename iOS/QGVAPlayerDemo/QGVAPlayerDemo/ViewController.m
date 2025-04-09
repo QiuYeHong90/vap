@@ -13,6 +13,7 @@
 // either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 
+#import <Masonry/Masonry.h>
 #import "ViewController.h"
 #import "UIView+VAP.h"
 #import "QGVAPWrapView.h"
@@ -96,7 +97,11 @@ void qg_VAP_Logger_handler(VAPLogLevel level, const char* file, int line, const 
     //默认使用metal渲染，使用OpenGL请打开下面这个开关
 //    mp4View.hwd_renderByOpenGL = YES;
     mp4View.center = self.view.center;
+    
     [self.view addSubview:mp4View];
+    [mp4View mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.bottom.mas_equalTo(0);
+    }];
     mp4View.userInteractionEnabled = YES;
     mp4View.hwd_enterBackgroundOP = HWDMP4EBOperationTypeStop;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onImageviewTap:)];
@@ -116,6 +121,9 @@ void qg_VAP_Logger_handler(VAPLogLevel level, const char* file, int line, const 
     NSString *mp4Path = [NSString stringWithFormat:@"%@/Resource/vap.mp4", [[NSBundle mainBundle] resourcePath]];
     VAPView *mp4View = [[VAPView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:mp4View];
+    [mp4View mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.bottom.mas_equalTo(0);
+    }];
     mp4View.center = self.view.center;
     mp4View.userInteractionEnabled = YES;
     mp4View.hwd_enterBackgroundOP = HWDMP4EBOperationTypePauseAndResume; // ⚠️ 建议设置该选项时对机型进行判断，屏蔽低端机
@@ -137,9 +145,12 @@ void qg_VAP_Logger_handler(VAPLogLevel level, const char* file, int line, const 
     static BOOL pause = NO;
     QGVAPWrapView *wrapView = [[QGVAPWrapView alloc] initWithFrame:self.view.bounds];
     wrapView.center = self.view.center;
-    wrapView.contentMode = QGVAPWrapViewContentModeAspectFit;
+    wrapView.contentMode = QGVAPWrapViewContentModeAspectFill;
     wrapView.autoDestoryAfterFinish = YES;
     [self.view addSubview:wrapView];
+    [wrapView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.bottom.mas_equalTo(0);
+    }];
     NSString *resPath = [NSString stringWithFormat:@"%@/Resource/vap.mp4", [[NSBundle mainBundle] resourcePath]];
     [wrapView setMute:YES];
     [wrapView playHWDMP4:resPath repeatCount:-1 delegate:self];
