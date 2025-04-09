@@ -21,7 +21,7 @@
 @property (nonatomic, weak) id<VAPWrapViewDelegate> delegate;
 
 @property (nonatomic, strong) VAPView *vapView;
-
+@property (nonatomic,strong) QGVAPConfigModel * cacheConfig;
 @end
 
 @implementation QGVAPWrapView
@@ -32,7 +32,14 @@
     }
     return self;
 }
-
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self commonInit];
@@ -48,6 +55,7 @@
 - (void)initVAPViewIfNeed {
     if (!_vapView) {
         _vapView = [[VAPView alloc] initWithFrame:self.bounds];
+        _vapView.hwd_enterBackgroundOP = self.hwd_enterBackgroundOP;
         [self addSubview:_vapView];
     }
 }
@@ -109,7 +117,12 @@
 }
 
 #pragma mark - Private
-
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (self.cacheConfig) {
+        [self p_setupContentModeWithConfig:self.cacheConfig];
+    }
+}
 - (void)p_setupContentModeWithConfig:(QGVAPConfigModel *)config {
     CGFloat realWidth = 0.;
     CGFloat realHeight = 0.;
@@ -195,7 +208,7 @@
 
 - (BOOL)shouldStartPlayMP4:(VAPView *)container config:(QGVAPConfigModel *)config {
     [self p_setupContentModeWithConfig:config];
-    
+    self.cacheConfig = config;
     if ([self.delegate respondsToSelector:@selector(vapWrap_viewshouldStartPlayMP4:config:)]) {
         return [self.delegate vapWrap_viewshouldStartPlayMP4:container config:config];
     }
